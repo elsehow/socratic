@@ -1,10 +1,14 @@
 # socratic
 
-A Python script that simulates a structured debate between two AI models (Claude) to iteratively refine and strengthen arguments on a given topic.
+A Python script that strengthens a thesis using socratic dialgoue.
+
+- **Input**: Thesis (in `first_message.py`)
+- **Output:** A more robust version of the thesis.
 
 ## Overview
 
-This project creates an automated conversation between two Claude AI models with different roles:
+This script simulates a structured debate between two AI models (Claude) to iteratively refine and strengthen arguments on a given topic.
+
 - **Claude 1**: Argues in favor of the thesis
 - **Claude 2**: Provides skeptical criticism to improve arguments
 - **Moderator**: Synthesizes the discussion into a refined thesis for the next round
@@ -12,8 +16,6 @@ This project creates an automated conversation between two Claude AI models with
 The conversation runs for multiple rounds, with each round consisting of several back-and-forth exchanges between the models, followed by a moderator synthesis that becomes the new thesis for the next round.
 
 ## install
-
-
 
 ```
 cp sample.env .env
