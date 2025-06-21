@@ -1,0 +1,1 @@
+Since the grid and the internet now have a two-way reliance on one another (due to IT/OT convergence), we should just lean into it and make the grid and the internet one infrastructure.
