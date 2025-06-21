@@ -22,9 +22,10 @@ logger.info(f"Configuration: {N_ROUNDS} rounds, {N_TURNS} turns per round, max t
 with open("first_message.md", "r") as f:
     FIRST_MESSAGE = f.read()
 
-logger.info("Loaded initial thesis from first_message.md")
+logger.info(f"Loaded initial thesis from first_message.md: {FIRST_MESSAGE}")
 
 COMMON_SYSTEM_PROMPT = """
+You are engaging in a Socratic dialogue.
 Be brief. Skip niceties.
 Get to the bottom of the topic.
 The conversation is endless.
@@ -34,12 +35,12 @@ Support claims with evidence and data.
 
 SYSTEM_PROMPT_CLAUDE_1 = f"""
 {COMMON_SYSTEM_PROMPT}
-Argue in favor.
+Respond to the critical questions.
 """
 
 SYSTEM_PROMPT_CLAUDE_2 = f"""
 {COMMON_SYSTEM_PROMPT}
-Offer skeptical criticism to improve the other model's argument.
+Offer skeptical questions to improve the other model's argument.
 """
 
 SYSTEM_PROMPT_MODERATOR = f"""
@@ -60,7 +61,7 @@ progress_bar.update()  # Force display at 0%
 
 load_dotenv()
 client = anthropic.Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-logger.info("Initialized Anthropic client")
+logger.debug("Initialized Anthropic client")
 
 def get_claude_response(messages, system_prompt):
     logger.debug(f"Making API call with {len(messages)} messages")
@@ -80,10 +81,10 @@ def get_claude_response(messages, system_prompt):
 
 # initialize the conversation with the initial thesis
 thesis = FIRST_MESSAGE
-logger.info("Starting conversation rounds")
+logger.debug("Starting conversation rounds")
 
 for round in range(N_ROUNDS):
-    logger.info(f"=== Starting Round {round + 1}/{N_ROUNDS} ===")
+    logger.debug(f"=== Starting Round {round + 1}/{N_ROUNDS} ===")
 
     # Start the conversation with an initial message
     messages_claude2 = [
@@ -95,7 +96,7 @@ for round in range(N_ROUNDS):
     ]
 
     for turn in range(N_TURNS):  # Run n turns of back-and-forth
-        logger.info(f"Round {round + 1}, Turn {turn + 1}/{N_TURNS}")
+        logger.debug(f"Round {round + 1}, Turn {turn + 1}/{N_TURNS}")
         
         # Claude 2 responds
         logger.debug("Claude 2 (skeptic) responding...")
@@ -116,7 +117,7 @@ for round in range(N_ROUNDS):
         messages_claude2.append({"role": "user", "content": claude1_reply})
 
     # Moderator responds with a revised thesis
-    logger.info("Moderator revising thesis...")
+    logger.debug("Moderator revising thesis...")
     moderator_reply = get_claude_response(messages_claude2, SYSTEM_PROMPT_MODERATOR)
     progress_bar.next()
 
@@ -124,8 +125,7 @@ for round in range(N_ROUNDS):
 
     # update the thesis
     thesis = moderator_reply
-    logger.info(f"Round {round + 1} complete. Thesis updated.")
+    logger.info(f"Round {round + 1} complete. Thesis updated: {thesis}")
 
 progress_bar.finish()
-logger.info("Conversation complete!")
-print(thesis)
+logger.info(f"Conversation complete! Final thesis: {thesis}")
