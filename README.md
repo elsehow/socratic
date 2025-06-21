@@ -5,6 +5,8 @@ A Python script that strengthens a thesis using socratic dialgoue.
 - **Input**: Thesis (in `first_message.py`)
 - **Output:** A more robust version of the thesis.
 
+Full debates are saved to `conversations.log`
+
 ## Overview
 
 This script simulates a structured debate between two AI models (Claude) to iteratively refine and strengthen arguments on a given topic.
